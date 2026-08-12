@@ -1,28 +1,29 @@
 class Solution {
 public:
-    char kthCharacter(int k) {
+    char solve(string s, int k) {
+
+        if(s.length() >= k) 
+            return s[k-1];
+
         
-        string s = "a";
+        string str = "";
 
-        while(s.length() < k) {
+        for(int i=0; i<s.length(); i++) {
 
-            string str = "";
-
-            for(int i=0; i<s.length(); i++) {
-
-                int idx = s[i] - 'a';
-                if(idx  < 25) {
-                    str += idx+1 + 'a';
-                }
-                else{
-                    str += 'a';
-                }
+            int idx = s[i] - 'a';
+            if(idx < 25) {
+                str += idx + 1 + 'a';
             }
-
-            s += str;
-
+            else{
+                str += 'a';
+            }
         }
 
-        return s[k-1];
+        return solve(s+str, k);
+    }
+    char kthCharacter(int k) {
+        
+
+        return solve("a", k);
     }
 };
