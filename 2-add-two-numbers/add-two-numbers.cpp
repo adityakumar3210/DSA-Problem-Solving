@@ -10,79 +10,52 @@
  */
 class Solution {
 public:
+    ListNode* solve(ListNode* l1, ListNode* l2, int rem) {
+         
+        if(l1 == NULL && l2 == NULL) 
+            return NULL;
+
+        int num = 0;
+
+        if(l1 != NULL) num += l1-> val;
+        if(l2 != NULL) num += l2-> val;
+
+        num += rem;
+        int digit = num % 10;
+        rem = num / 10;
+
+        ListNode* newNode = new ListNode(digit);
+
+        ListNode* nextNode;
+        if(l1 != NULL && l2 != NULL) {
+            nextNode = solve(l1-> next, l2-> next, rem);
+        }
+        else if(l1 != NULL) {
+            nextNode = solve(l1-> next, l2, rem);
+        }
+        else if(l2 != NULL) {
+            nextNode = solve(l1, l2-> next, rem);
+        }
+
+        if(nextNode == NULL && rem > 0) {
+            newNode-> next = new ListNode(rem);
+            return newNode;
+        }
+
+        newNode-> next = nextNode;
+        return newNode;
+
+    }
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
         
-        ListNode* newNode = new ListNode(-1);
-        ListNode* temp    = newNode;
-        ListNode* t1      = l1;
-        ListNode* t2      = l2;
+        if(l1 == NULL) 
+           return l2;
 
-        int carry = 0;
+        if(l2 == NULL) 
+            return l1;
 
-        while(t1 != NULL && t2 != NULL) {
+        return solve(l1, l2, 0);
 
-            int val = t1-> val + t2-> val + carry;
-            temp-> next = new ListNode(val);
-            
-            if(carry == 1) 
-                carry = 0;
 
-            if(val >= 10) {
-                int digit = val % 10;
-                temp-> next-> val = digit;
-                carry = val / 10;
-            }
-
-            temp = temp-> next;
-            t1   = t1-> next;
-            t2   = t2-> next;
-
-        }
-
-        while(t1 != NULL) {
-
-            int val = t1-> val + carry;
-            temp-> next = new ListNode(val);
-
-            if(carry == 1) 
-               carry = 0;
-
-            if(val >= 10) {
-                int digit = val % 10;
-                temp-> next-> val = digit;
-                carry = val / 10;
-            }
-
-            temp = temp-> next;
-            t1   = t1-> next;
-
-        }
-
-        while(t2 != NULL) {
-
-            int val = t2-> val + carry;
-            temp-> next = new ListNode(val);
-            
-            if(carry == 1) 
-               carry = 0;
-
-            if(val >= 10) {
-                int digit = val % 10;
-                temp-> next-> val = digit;
-                carry = val / 10;
-            }
-
-            temp = temp-> next;
-            t2   = t2-> next;
-
-        }
-
-        if(carry == 1) 
-            temp-> next = new ListNode(1);
-        
-
-        return newNode-> next;
-
-        
     }
 };
