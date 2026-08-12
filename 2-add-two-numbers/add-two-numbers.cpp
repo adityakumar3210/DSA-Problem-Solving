@@ -12,8 +12,11 @@ class Solution {
 public:
     ListNode* solve(ListNode* l1, ListNode* l2, int rem) {
          
-        if(l1 == NULL && l2 == NULL) 
-            return NULL;
+        if(l1 == NULL && l2 == NULL) {
+            if(rem  == 0)return NULL;
+            return new ListNode(1);
+        }
+            
 
         int num = 0;
 
@@ -35,11 +38,6 @@ public:
         }
         else if(l2 != NULL) {
             nextNode = solve(l1, l2-> next, rem);
-        }
-
-        if(nextNode == NULL && rem > 0) {
-            newNode-> next = new ListNode(rem);
-            return newNode;
         }
 
         newNode-> next = nextNode;
