@@ -1,5 +1,14 @@
 class Solution {
 public:
+    string solve(int n, string& s) {
+
+        if(n == 0) 
+           return "";
+
+        string ans = s + solve(n-1, s);
+
+        return ans;
+    }
     string decodeString(string s) {
         
         int n = s.length();
@@ -44,9 +53,7 @@ public:
 
                 string ans = "";
 
-                for(int i=0; i<k; i++) {
-                    ans += temp;
-                }
+                ans = solve(k, temp);
 
                 st.push(ans);
             }
