@@ -1,27 +1,26 @@
 class Solution {
 public:
-    int n;
     int t[101];
-    int solve(int i, vector<int>& nums) {
+    int solve(int n, vector<int>& nums) {
 
-        if(i >= n) 
+        if(n <= 0) 
             return 0;
 
-        if(t[i] != -1) 
-            return t[i];
+        if(t[n] != -1) 
+            return t[n];
 
-        int take = nums[i] + solve(i+2, nums);
+        int take = nums[n-1] + solve(n-2, nums);
 
-        int not_take = solve(i+1, nums);
+        int not_take = solve(n-1, nums);
 
-        return t[i] = max(take, not_take);
+        return t[n] = max(take, not_take);
     }
     int rob(vector<int>& nums) {
         
-        n = nums.size();
-        
+        int n = nums.size();
+
         memset(t, -1, sizeof(t));
 
-        return solve(0, nums);
+        return solve(n, nums);
     }
 };
