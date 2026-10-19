@@ -1,50 +1,44 @@
 class Solution {
 public:
-    int maxProfit(int k, vector<int>& prices) {
+    int n;
+    int dp[1001][2][101];
+
+    int solve(int i, bool buy, int k, vector<int>& prices) {
+
+        if(i == n || k == 0) 
+           return 0;
+
+        if(dp[i][buy][k] != -1) 
+           return dp[i][buy][k];
+
+        int result = 0;
+
         
-        int n = prices.size();
-        int K = k;
+        if(buy) {
 
+            int take = -prices[i] + solve(i+1, false, k, prices);
 
-        vector<vector<vector<int> > > dp(n+1, vector<vector<int> > (K+1, vector<int> (2, 0)));
+            int not_take = solve(i+1, buy, k, prices);
 
-        for(int i=n-1; i>=0; i--) {
+            result = max({take, not_take, result});
+        }
+        else{
 
-            for(int k=1; k<=K; k++) {
+            int sell = +prices[i] + solve(i+1, true, k-1, prices);
 
+            int not_sell = solve(i+1, buy, k, prices);
 
-                for(int buy=1; buy>=0; buy--) {
-
-                    int profit = 0;
-
-                    if(buy == 1) {
-                         
-                        int take     = -prices[i] + dp[i+1][k][0];
-                
-                        int not_take =  dp[i+1][k][1];
-                        
-
-                        profit = max({profit, take, not_take});
-
-                    }
-                    else{
-                        
-                        int sell     = prices[i] +  dp[i+1][k-1][1];
-
-                        int not_sell =  dp[i+1][k][0];
-                       
-
-                        profit = max({profit, sell, not_sell});
-
-                    }
-
-                    dp[i][k][buy] = profit;
-                }
-
-               
-            }
+            result = max({sell, not_sell, result});
         }
 
-        return dp[0][K][1];
+        return dp[i][buy][k] = result;
+    }
+    int maxProfit(int k, vector<int>& prices) {
+        
+        n = prices.size();
+
+        memset(dp, -1, sizeof(dp));
+
+        return solve(0, true, k, prices);
     }
 };
